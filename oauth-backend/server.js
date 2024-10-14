@@ -24,9 +24,9 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-app.get("/kakao/url", (req, res, next) => {
-  const url = KakaoAuthCode;
-  res.status(200).json({ url });
+app.get("/kakao/uri", (req, res, next) => {
+  const uri = KakaoAuthCode; //redirect uri
+  res.status(200).json({ uri });
 });
 
 // launch server
