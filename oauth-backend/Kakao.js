@@ -27,9 +27,41 @@ const getAccessToken = async (code) => {
       code: code,
     },
   });
-  console.log(data);
+  // console.log(data);
 
   return data;
 };
 
-export { KakaoLoginUri, getAccessToken };
+//ACCESS TOKEN을 통해 유저 정보를 가져오는 함수
+const getUserData = async (token) => {
+  const { data } = await axios.post("https://kapi.kakao.com/v2/user/me", null, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+
+  console.log(data);
+  // {
+  //   id: 3752665515,
+  //   connected_at: '2024-10-16T07:30:13Z',
+  //   properties: {
+  //     nickname: '한상원',
+  //     profile_image: 'http://k.kakaocdn.net/dn/bwHH1a/btr02AeEAKs/eeOqvWRurCyNTXraMTk1W0/img_640x640.jpg',
+  //     thumbnail_image: 'http://k.kakaocdn.net/dn/bwHH1a/btr02AeEAKs/eeOqvWRurCyNTXraMTk1W0/img_110x110.jpg'  },
+  //   kakao_account: {
+  //     profile_nickname_needs_agreement: false,
+  //     profile_image_needs_agreement: false,
+  //     profile: {
+  //       nickname: '한상원',
+  //       thumbnail_image_url: 'http://k.kakaocdn.net/dn/bwHH1a/btr02AeEAKs/eeOqvWRurCyNTXraMTk1W0/img_110x110.jpg',
+  //       profile_image_url: 'http://k.kakaocdn.net/dn/bwHH1a/btr02AeEAKs/eeOqvWRurCyNTXraMTk1W0/img_640x640.jpg',
+  //       is_default_image: false,
+  //       is_default_nickname: false
+  //     }
+  //   }
+  // }
+  return data;
+};
+
+export { KakaoLoginUri, getAccessToken, getUserData };

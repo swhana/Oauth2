@@ -1,5 +1,5 @@
 import express from "express";
-import { getAccessToken, KakaoLoginUri } from "./Kakao.js";
+import { getAccessToken, getUserData, KakaoLoginUri } from "./Kakao.js";
 import fs from "fs";
 import https from "https";
 import dotenv from "dotenv";
@@ -34,10 +34,28 @@ app.get("/kakao/uri", (req, res) => {
 app.get("/oauth/kakao", async (req, res) => {
   const code = req.query.code; //uri query에서 ?code=로 된 부분 가져오기
   console.log("code: " + code);
-  const data = await getAccessToken(code);
-  console.log("token: " + data.access_token);
+  const tokenData = await getAccessToken(code);
+  const userData = await getUserData(tokenData.access_token);
 
-  res.send();
+  res.cookie("access-token", tokenData.access_token, {
+    httpOnly: true,
+    secure: true,
+    maxAge: tokenData.expires_in,
+    sameSite: "strict",
+  });
+
+  res.cookie("refresh-token", tokenData.refresh_token, {
+    httpOnly: true,
+    secure: true,
+    maxAge: tokenData.refresh_token_expires_in,
+    sameSite: "strict",
+  });
+
+  res.redirect(
+    `${process.env.BASE_URL}/login/success?user=${encodeURIComponent(
+      JSON.stringify(userData)
+    )}`
+  );
 });
 
 // launch server
