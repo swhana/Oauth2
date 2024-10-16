@@ -1,12 +1,12 @@
 function KakaoBtn() {
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL; //백엔드 API 요청 URL
   const fetchUri = async () => {
     try {
       //백엔드 서버로 로그인 요청 시도
       const res = await fetch(`${API_URL}/kakao/uri`);
       const body = await res.json();
 
-      document.location.href = body.uri;
+      window.location.href = body.uri;
     } catch (error) {
       console.error(error);
     }
